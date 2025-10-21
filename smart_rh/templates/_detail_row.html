@@ -1,0 +1,22 @@
+{% macro detail_row(label, value, other_value=none, is_textarea=false) %}
+    <div class="flex flex-col md:flex-row md:items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
+        <dt class="text-sm font-medium text-gray-900 md:w-1/3">{{ label }} :</dt>
+        <dd class="mt-1 md:mt-0 md:w-2/3 text-gray-700">
+            {% if value %}
+                {% if is_textarea %}
+                    <p class="whitespace-pre-wrap">{{ value or 'N/A' }}</p>
+                {% else %}
+                    <span class="font-semibold">{{ value }}</span>
+                {% endif %}
+            {% else %}
+                <span class="italic text-gray-500">Non renseigné</span>
+            {% endif %}
+
+            {% if other_value and other_value.strip() %}
+                <div class="mt-1 p-2 bg-yellow-100 rounded text-xs text-yellow-800 border-l-4 border-yellow-500">
+                    <span class="font-bold">Autre précision :</span> {{ other_value }}
+                </div>
+            {% endif %}
+        </dd>
+    </div>
+{% endmacro %}

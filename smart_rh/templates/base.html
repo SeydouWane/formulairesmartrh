@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart RH{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+    
+    {% block show_admin_link %}{% set show_admin_link = false %}{% endblock %}
+
+    <header class="bg-indigo-700 shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            
+            <a href="{{ url_for('main.formulaire') }}" class="flex items-center space-x-2">
+                <img src="{{ url_for('static', filename='css/SmartRH.jpg') }}" 
+                     alt="Logo Smart RH" 
+                     class="h-8 w-auto rounded-full"> <span class="text-2xl font-bold text-white">Smart RH</span> 
+            </a>
+            <nav>
+                {% if show_admin_link %}
+                    <a href="{{ url_for('main.admin_dashboard') }}" class="text-white hover:text-indigo-200 transition duration-150 ease-in-out px-3 py-2 rounded-md">Admin</a>
+                {% endif %}
+                
+                {% if not show_admin_link %}
+                    <a href="{{ url_for('main.admin_login') }}" class="text-white hover:text-indigo-200 transition duration-150 ease-in-out px-3 py-2 rounded-md opacity-0 pointer-events-none">Admin</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="space-y-3 mb-6">
+                {% for category, message in messages %}
+                    {% set color = 'green' if category == 'success' else 'red' %}
+                    <div class="p-4 text-sm text-{{ color }}-800 rounded-lg bg-{{ color }}-100" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="mt-10 p-4 text-center text-sm text-gray-500 border-t">
+        &copy; 2024 Projet Smart RH. Tous droits réservés.
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+
+{% block title %}Questionnaire de Découverte Clientèle - Smart RH{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-4 max-w-5xl">
+
+    <div class="bg-white shadow-xl rounded-lg p-6 md:p-8 mb-8 border-l-4 border-red-500">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-3">
+            🎯 Aidez-nous à transformer le recrutement en Afrique !
+        </h1>
+        <p class="text-lg text-gray-700 mb-4">
+            En tant que professionnel(le) des Ressources Humaines, votre expérience est inestimable. Ce questionnaire rapide (environ 5 minutes) nous permettra de comprendre vos défis quotidiens et de bâtir **Smart RH**, la plateforme qui va réellement simplifier la gestion de vos candidatures.
+        </p>
+        <p class="text-sm text-red-500 font-medium">
+            Vos réponses, anonymes et confidentielles, sont la clé de notre succès commun. Merci de votre participation !
+        </p>
+    </div>
+    
+    <form method="POST" action="{{ url_for('main.formulaire') }}" class="space-y-12 bg-white p-8 md:p-12 rounded-xl shadow-2xl">
+        
+        <section class="border-l-4 border-indigo-600 pl-6">
+            <h3 class="text-2xl font-bold text-indigo-700 mb-6">🧩 Partie 1 : Contexte Professionnel</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <div>
+                    <label for="nom_prenom" class="block text-sm font-semibold text-gray-700">Nom et prénom :</label>
+                    <input type="text" name="nom_prenom" id="nom_prenom" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2.5 bg-gray-50">
+                </div>
+
+                <div>
+                    <label for="nom_entreprise" class="block text-sm font-semibold text-gray-700">Nom de l’entreprise ou de l’organisation :</label>
+                    <input type="text" name="nom_entreprise" id="nom_entreprise" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2.5 bg-gray-50">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label for="fonction" class="block text-sm font-semibold text-gray-700">Fonction actuelle :</label>
+                    <input type="text" name="fonction" id="fonction" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2.5 bg-gray-50">
+                </div>
+            </div>
+
+            <div class="space-y-6 mt-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Taille approximative de votre structure :</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {% for taille in ['Moins de 10 employés', 'Entre 10 et 50 employés', 'Entre 50 et 200 employés', 'Plus de 200 employés'] %}
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-indigo-50 transition duration-150">
+                            <input type="radio" name="taille_structure" value="{{ taille }}" class="form-radio h-5 w-5 text-indigo-600 focus:ring-indigo-500" id="taille_{{ loop.index }}">
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ taille }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Votre structure recrute-t-elle directement des employés ou relaie-t-elle seulement des offres ?</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {% for type_rec in ['Nous recrutons directement', 'Nous relayons des offres pour d’autres entreprises', 'Les deux'] %}
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-indigo-50 transition duration-150">
+                            <input type="radio" name="type_recrutement" value="{{ type_rec }}" class="form-radio h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ type_rec }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="border-l-4 border-indigo-600 pl-6">
+            <h3 class="text-2xl font-bold text-indigo-700 mb-6">💡 Partie 2 : Processus actuel</h3>
+            <div class="space-y-8">
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Comment publiez-vous actuellement vos offres d’emploi ? (Choix multiples)</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for option in ['Réseaux sociaux (Facebook, LinkedIn, WhatsApp, etc.)', 'Email ou bouche à oreille', 'Plateformes spécialisées (ex. Emploisenegal, Jobartis, etc.)'] %}
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" name="publie_comment" value="{{ option }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ option }}</span>
+                        </label>
+                        {% endfor %}
+
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" id="checkbox_publie_autre" onchange="toggleAutreField('publie')" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">Autre (précisez) :</span>
+                        </label>
+                        <div id="field_publie_autre" class="mt-2 pl-2 md:col-span-2 hidden">
+                            <input type="text" name="publie_comment_autre" placeholder="Veuillez préciser votre méthode de publication" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2.5 bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Comment recevez-vous les candidatures ? (Choix multiples)</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for option in ['Par email', 'Par formulaire Google ou JotForm', 'En main propre / version papier'] %}
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" name="recu_candidature_comment" value="{{ option }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ option }}</span>
+                        </label>
+                        {% endfor %}
+                        
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" id="checkbox_recu_autre" onchange="toggleAutreField('recu')" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">Autre (précisez) :</span>
+                        </label>
+                        <div id="field_recu_autre" class="mt-2 pl-2 md:col-span-2 hidden">
+                            <input type="text" name="recu_candidature_comment_autre" placeholder="Veuillez préciser votre méthode de réception" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2.5 bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Combien de candidatures recevez-vous en moyenne par offre ?</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {% for moyenne in ['Moins de 20', 'Entre 20 et 50', 'Entre 50 et 100', 'Plus de 100'] %}
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-indigo-50 transition duration-150">
+                            <input type="radio" name="candidatures_moyenne" value="{{ moyenne }}" class="form-radio h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ moyenne }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <label for="tri_cv_comment" class="block text-sm font-semibold text-gray-700">Qui s’occupe du tri des CV et comment cela se passe-t-il ?</label>
+                    <textarea name="tri_cv_comment" id="tri_cv_comment" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50"></textarea>
+                </div>
+
+                <div class="p-4 border border-gray-200 rounded-lg">
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Rencontrez-vous des difficultés lors du tri ou de la sélection des candidats ?</label>
+                    <div class="space-x-6">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="difficulte_tri" id="difficulte_tri_oui" value="Oui" class="form-radio h-5 w-5 text-indigo-600" onclick="document.getElementById('field_difficulte_tri_si_oui').classList.remove('hidden')">
+                            <span class="ml-2 text-gray-700 font-medium">Oui</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="difficulte_tri" id="difficulte_tri_non" value="Non" class="form-radio h-5 w-5 text-indigo-600" onclick="document.getElementById('field_difficulte_tri_si_oui').classList.add('hidden'); document.getElementById('difficulte_tri_si_oui').value = ''">
+                            <span class="ml-2 text-gray-700 font-medium">Non</span>
+                        </label>
+                    </div>
+                    <div id="field_difficulte_tri_si_oui" class="mt-4 hidden border-t pt-4">
+                        <label for="difficulte_tri_si_oui" class="block text-sm font-semibold text-gray-700">Si oui, lesquelles ? (Réponse libre)</label>
+                        <textarea name="difficulte_tri_si_oui" id="difficulte_tri_si_oui" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200"></div>
+
+        <section class="border-l-4 border-indigo-600 pl-6">
+            <h3 class="text-2xl font-bold text-indigo-700 mb-6">⚙️ Partie 3 : Problèmes et frustrations</h3>
+            <div class="space-y-6">
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Quelles sont les plus grandes difficultés que vous rencontrez dans la gestion d’un appel à candidatures ?</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for option in ['Trop de CV à lire', 'Manque de temps pour trier', 'Manque d’outils pour centraliser', 'Difficulté à évaluer les compétences réelles', 'Mauvaise organisation / perte de documents'] %}
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" name="plus_grandes_difficultes" value="{{ option }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ option }}</span>
+                        </label>
+                        {% endfor %}
+                        
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" id="checkbox_difficultes_autre" onchange="toggleAutreField('difficultes')" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">Autre (précisez) :</span>
+                        </label>
+                        <div id="field_difficultes_autre" class="mt-2 pl-2 md:col-span-2 hidden">
+                            <input type="text" name="difficultes_autre" placeholder="Veuillez préciser une autre difficulté" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2.5 bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Avez-vous déjà utilisé une plateforme ou un logiciel RH pour gérer vos appels à candidatures ?</label>
+                    <div class="space-x-6">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="utilise_plateforme_rh" id="plateforme_rh_oui" value="Oui" class="form-radio h-5 w-5 text-indigo-600" onchange="document.getElementById('field_plateforme_si_oui').classList.remove('hidden')">
+                            <span class="ml-2 text-gray-700 font-medium">Oui</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="utilise_plateforme_rh" id="plateforme_rh_non" value="Non" class="form-radio h-5 w-5 text-indigo-600" onchange="document.getElementById('field_plateforme_si_oui').classList.add('hidden'); document.getElementById('plateforme_si_oui').value = ''">
+                            <span class="ml-2 text-gray-700 font-medium">Non</span>
+                        </label>
+                    </div>
+                    <div id="field_plateforme_si_oui" class="mt-4 hidden border-t pt-4">
+                        <label for="plateforme_si_oui" class="block text-sm font-semibold text-gray-700">Si oui, laquelle ? Et comment l’avez-vous trouvée ? (Réponse libre)</label>
+                        <textarea name="plateforme_si_oui" id="plateforme_si_oui" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50"></textarea>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Si vous deviez améliorer votre manière actuelle de gérer les candidatures, quelles seraient vos priorités ?</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for option in ['Gagner du temps', 'Trier automatiquement les CV', 'Avoir un tableau de bord clair', 'Mieux suivre les candidatures', 'Faciliter la publication des offres'] %}
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" name="priorites_amelioration" value="{{ option }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ option }}</span>
+                        </label>
+                        {% endfor %}
+                        
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" id="checkbox_priorites_autre" onchange="toggleAutreField('priorites')" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">Autre (précisez) :</span>
+                        </label>
+                        <div id="field_priorites_autre" class="mt-2 pl-2 md:col-span-2 hidden">
+                            <input type="text" name="priorites_amelioration_autre" placeholder="Veuillez préciser une autre priorité" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2.5 bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200"></div>
+
+        <section class="border-l-4 border-indigo-600 pl-6">
+            <h3 class="text-2xl font-bold text-indigo-700 mb-6">🤖 Partie 4 : Perception de Smart RH</h3>
+            <div class="space-y-6">
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">
+                        Si une plateforme comme Smart RH permettait de : créer facilement un appel à candidatures, obtenir un lien de formulaire unique à partager, et classer automatiquement les CV selon les critères que vous avez définis, seriez-vous intéressé(e) à l’utiliser ?
+                    </label>
+                    <div class="space-x-6">
+                        {% for reponse in ['Oui', 'Non', 'Peut-être'] %}
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="interesse_smart_rh" value="{{ reponse }}" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700 font-medium">{{ reponse }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Parmi ces avantages, lesquels vous semblent les plus utiles ?</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for option in ['Classement automatique des candidats selon les critères', 'Gain de temps et réduction de la charge administrative', 'Formulaire et lien personnalisés', 'Tableau de bord clair avec les candidatures reçues', 'Simplicité d’utilisation'] %}
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" name="avantages_utiles" value="{{ option }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">{{ option }}</span>
+                        </label>
+                        {% endfor %}
+
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition duration-150">
+                            <input type="checkbox" id="checkbox_avantages_autre" onchange="toggleAutreField('avantages')" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500">
+                            <span class="ml-3 text-sm font-medium text-gray-700">Autre (précisez) :</span>
+                        </label>
+                        <div id="field_avantages_autre" class="mt-2 pl-2 md:col-span-2 hidden">
+                            <input type="text" name="avantages_utiles_autre" placeholder="Veuillez préciser un autre avantage" class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2.5 bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Seriez-vous prêt(e) à tester une version bêta de la solution Smart RH ?</label>
+                    <div class="space-x-6">
+                        {% for reponse in ['Oui, avec plaisir', 'Peut-être, selon les conditions', 'Non'] %}
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="teste_beta" value="{{ reponse }}" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2 text-gray-700 font-medium">{{ reponse }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="raison_adoption" class="block text-sm font-semibold text-gray-700">Quelle est selon vous la principale raison qui pousserait une entreprise à adopter une solution comme Smart RH ?</label>
+                    <textarea name="raison_adoption" id="raison_adoption" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-gray-200"></div>
+
+        <section class="border-l-4 border-indigo-600 pl-6">
+            <h3 class="text-2xl font-bold text-indigo-700 mb-6">💬 Partie 5 : Vos attentes et suggestions</h3>
+            <div class="space-y-6">
+
+                <div>
+                    <label for="plateforme_rh_ideale" class="block text-sm font-semibold text-gray-700">Que devrait absolument contenir une plateforme RH idéale selon vous ?</label>
+                    <textarea name="plateforme_rh_ideale" id="plateforme_rh_ideale" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50"></textarea>
+                </div>
+
+                <div>
+                    <label for="attentes_principales" class="block text-sm font-semibold text-gray-700">Quelles sont vos attentes principales vis-à-vis d’un outil de gestion de candidatures ?</label>
+                    <textarea name="attentes_principales" id="attentes_principales" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50"></textarea>
+                </div>
+
+                <div>
+                    <label for="suggestions" class="block text-sm font-semibold text-gray-700">Avez-vous d’autres suggestions ou remarques pour améliorer Smart RH ?</label>
+                    <textarea name="suggestions" id="suggestions" rows="3" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 bg-gray-50"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <button type="submit" class="w-full py-3 px-4 border border-transparent rounded-lg shadow-xl text-lg font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+            Soumettre le questionnaire
+        </button>
+    </form>
+    
+    <p class="text-center text-sm text-gray-500 mt-6">Toutes les réponses sont facultatives.</p>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
