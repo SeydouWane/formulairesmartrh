@@ -124,32 +124,43 @@ def admin_dashboard():
     submissions = Submission.query.order_by(Submission.date_soumission.desc()).all()
     return render_template('admin_dashboard.html', submissions=submissions)
 
+# Fichier smart_rh/routes.py (Extrait de la fonction)
+
 @main.route('/admin/summary')
-@login_required # <--- Ajout du décorateur de protection
+@login_required 
 def admin_summary():
-    # Analyse de données : agrégation des réponses
-    
-    # Ex: Compter la répartition de la taille de structure
+    # Total des soumissions
+    total_submissions = Submission.query.count()
+
+    # 1. Taille de structure (Déjà existant)
     taille_stats = db.session.query(
         Submission.taille_structure, 
         func.count(Submission.taille_structure)
     ).group_by(Submission.taille_structure).all()
     
-    # Ex: Compter la répartition des difficultés de tri (Oui/Non)
+    # 2. Difficultés de tri (Déjà existant)
     difficulte_tri_stats = db.session.query(
         Submission.difficulte_tri, 
         func.count(Submission.difficulte_tri)
     ).group_by(Submission.difficulte_tri).all()
-    
-    # Total des soumissions pour les pourcentages
-    total_submissions = Submission.query.count()
 
-    # NOTE : L'analyse des champs de type Text (checkboxes multiples) est plus complexe 
-    # et nécessiterait des requêtes spécifiques ou un traitement Python après la récupération.
+    # 3. NOUVEAU : Utilisation Plateforme RH
+    plateforme_rh_stats = db.session.query(
+        Submission.utilise_plateforme_rh, 
+        func.count(Submission.utilise_plateforme_rh)
+    ).group_by(Submission.utilise_plateforme_rh).all()
+
+    # 4. NOUVEAU : Intérêt pour Smart RH
+    interesse_stats = db.session.query(
+        Submission.interesse_smart_rh, 
+        func.count(Submission.interesse_smart_rh)
+    ).group_by(Submission.interesse_smart_rh).all()
     
     return render_template('admin_resume.html', 
                            taille_stats=taille_stats,
                            difficulte_tri_stats=difficulte_tri_stats,
+                           plateforme_rh_stats=plateforme_rh_stats, # NOUVEAU
+                           interesse_stats=interesse_stats,         # NOUVEAU
                            total_submissions=total_submissions)
 
 @main.route('/admin/submission/<int:submission_id>')
